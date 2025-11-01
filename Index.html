@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GuZui导航</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px 20px;
+        }
+        
+        .container {
+            max-width: 1400px;
+            width: 100%;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-weight: 600;
+            font-size: 2.5rem;
+        }
+        
+        .subtitle {
+            color: #7f8c8d;
+            font-size: 1.1rem;
+            margin-bottom: 30px;
+        }
+        
+        .search-section {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 40px;
+        }
+        
+        .bing-search-container {
+            display: flex;
+            max-width: 600px;
+            width: 100%;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            border-radius: 30px;
+            overflow: hidden;
+        }
+        
+        #bingSearchInput {
+            flex-grow: 1;
+            padding: 15px 20px;
+            border: none;
+            outline: none;
+            font-size: 1rem;
+            background: white;
+        }
+        
+        #bingSearchButton {
+            background: #0078d4;
+            color: white;
+            border: none;
+            padding: 0 25px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background 0.3s;
+        }
+        
+        #bingSearchButton:hover {
+            background: #0066b4;
+        }
+        
+        .card-search-container {
+            max-width: 500px;
+            margin: 0 auto 30px;
+            position: relative;
+        }
+        
+        #cardSearchInput {
+            width: 100%;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            font-size: 1rem;
+            outline: none;
+            transition: all 0.3s;
+        }
+        
+        #cardSearchInput:focus {
+            box-shadow: 0 5px 20px rgba(52, 152, 219, 0.3);
+        }
+        
+        .cards-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 20px;
+            padding: 20px;
+        }
+        
+        .card {
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08);
+            padding: 25px 20px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+            min-height: 120px;
+            justify-content: center;
+        }
+        
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, #3498db, #9b59b6);
+            transform: scaleX(0);
+            transition: transform 0.3s;
+        }
+        
+        .card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 20px rgba(0, 0, 0, 0.15);
+        }
+        
+        .card:hover::before {
+            transform: scaleX(1);
+        }
+        
+        .card-name {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #2c3e50;
+            text-align: center;
+            transition: color 0.3s;
+        }
+        
+        .card:hover .card-name {
+            color: #3498db;
+        }
+        
+        .card-number {
+            position: absolute;
+            top: 8px;
+            right: 10px;
+            font-size: 0.8rem;
+            color: #95a5a6;
+            font-weight: 500;
+        }
+        
+        .footer {
+            margin-top: 50px;
+            text-align: center;
+            color: #7f8c8d;
+            font-size: 0.9rem;
+            padding: 20px;
+        }
+        
+        .no-results {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 40px;
+            color: #7f8c8d;
+            font-size: 1.1rem;
+        }
+        
+        @media (max-width: 768px) {
+            .cards-container {
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+                gap: 15px;
+                padding: 10px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .card {
+                padding: 20px 15px;
+                min-height: 100px;
+            }
+            
+            .bing-search-container {
+                flex-direction: column;
+                border-radius: 15px;
+            }
+            
+            #bingSearchButton {
+                padding: 12px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .cards-container {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            }
+            
+            .card-name {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>GuZui导航</h1>
+            <p class="subtitle">点击卡片访问相应网站</p>
+            
+            <!-- 必应搜索框 -->
+            <div class="search-section">
+                <div class="bing-search-container">
+                    <input type="text" id="bingSearchInput" placeholder="搜索点好玩的东西...">
+                    <button id="bingSearchButton">让我看看</button>
+                </div>
+            </div>
+            
+            <!-- 卡片搜索框 -->
+            <div class="card-search-container">
+                <input type="text" id="cardSearchInput" placeholder="卡片太多了...找找卡片吧...">
+            </div>
+        </header>
+        
+        <div class="cards-container" id="cardsContainer">
+            <!-- 卡片将通过JavaScript动态生成 -->
+        </div>
+        
+        <div class="footer">
+            <p>借助deepseek修改bug</p>
+        </div>
+    </div>
+
+    <script>
+        // 卡片数据 - 修改这里的链接和名称来自定义您的卡片
+        const cardsData = [
+            { name: "支持一下我", url: "https://space.bilibili.com/3546778720798797?spm_id_from=333.1007.0.0" },
+            { name: "GitHub", url: "https://github.com" },
+            { name: "网页版MC", url: "https://www.mc.js.cool/" },
+            { name: "B站", url: "https://www.bilibili.com" },
+            { name: "脱离极域控制 密码bzkq", url: "https://wwvh.lanzouu.com/iR6z239s5p1c" },
+            { name: "CS1.6在线玩", url: "https://play-cs.com/zh/servers" },
+            { name: "抖音", url: "https://douyin.com" },
+            { name: "mumu模拟器", url: "https://mumu.163.com/" },
+            { name: "在线游戏", url: "https://poki.com/zh" },
+            { name: "雨云", url: "https://app.rainyun.com" },
+            { name: "163邮箱", url: "https://mail.163.com" },
+            { name: "126邮箱", url: "https://mail.126.com" },
+            { name: "QQ邮箱", url: "https://mail.qq.com" },
+            { name: "Microsoft", url: "https://www.microsoft.com" },
+            { name: "MC网易版", url: "https://mc.163.com" },
+            { name: "Adobe", url: "https://www.adobe.com" },
+            { name: "Steam", url: "https://s.team" },
+            { name: "twitch", url: "https://www.twitch.tv/" },
+            { name: "Veta", url: "https://veta.ffuu.cn" },
+            { name: "赞助", url: "zanzhu/index.html" },
+            { name: "无", url: "https://www.figma.com" },
+            { name: "无", url: "https://www.canva.com" },
+            { name: "无", url: "https://www.pinterest.com" },
+            { name: "无", url: "https://dribbble.com" },
+            { name: "无", url: "https://www.behance.net" },
+            { name: "无", url: "https://codepen.io" },
+            { name: "无", url: "https://www.businessinsider.com" }
+        ];
+
+        // 生成卡片
+        function generateCards() {
+            const container = document.getElementById('cardsContainer');
+            container.innerHTML = '';
+            
+            cardsData.forEach((card, index) => {
+                const cardElement = document.createElement('a');
+                cardElement.href = card.url;
+                cardElement.className = 'card';
+                cardElement.target = '_blank';
+                
+                cardElement.innerHTML = `
+                    <div class="card-number">${index + 1}</div>
+                    <div class="card-name">${card.name}</div>
+                `;
+                
+                container.appendChild(cardElement);
+            });
+        }
+
+        // 卡片搜索功能
+        function setupCardSearch() {
+            const searchInput = document.getElementById('cardSearchInput');
+            
+            searchInput.addEventListener('input', function() {
+                const searchTerm = this.value.toLowerCase();
+                const cards = document.querySelectorAll('.card');
+                let visibleCount = 0;
+                
+                cards.forEach(card => {
+                    const cardName = card.querySelector('.card-name').textContent.toLowerCase();
+                    if (cardName.includes(searchTerm)) {
+                        card.style.display = 'flex';
+                        visibleCount++;
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+                
+                // 显示/隐藏"无结果"消息
+                const noResults = document.querySelector('.no-results');
+                if (visibleCount === 0 && searchTerm) {
+                    if (!noResults) {
+                        const noResultsElement = document.createElement('div');
+                        noResultsElement.className = 'no-results';
+                        noResultsElement.textContent = `没有找到与"${searchTerm}"相关的卡片`;
+                        document.getElementById('cardsContainer').appendChild(noResultsElement);
+                    }
+                } else if (noResults) {
+                    noResults.remove();
+                }
+            });
+        }
+
+        // 必应搜索功能
+        function setupBingSearch() {
+            const searchInput = document.getElementById('bingSearchInput');
+            const searchButton = document.getElementById('bingSearchButton');
+            
+            // 点击搜索按钮
+            searchButton.addEventListener('click', performBingSearch);
+            
+            // 按回车键搜索
+            searchInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    performBingSearch();
+                }
+            });
+            
+            function performBingSearch() {
+                const searchTerm = searchInput.value.trim();
+                if (searchTerm) {
+                    // 使用必应进行搜索
+                    window.open(`https://www.bing.com/search?q=${encodeURIComponent(searchTerm)}`, '_blank');
+                }
+            }
+        }
+
+        // 页面加载完成后初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            generateCards();
+            setupCardSearch();
+            setupBingSearch();
+        });
+    </script>
+</body>
+</html>
